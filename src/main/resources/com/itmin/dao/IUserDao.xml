@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <mapper namespace="com.itmin.dao.IUserDao">
+
+     <!--配置查询-->
+    <select id="findAll" resultType="aliasUser">
+        SELECT * FROM user;
+    </select>
+
+    <!--添加用户-->
+    <insert id="addUser" parameterType="com.itmin.domain.User">
+        insert into mydata.user (username, birthday, sex, address) values (#{username},#{birthday},#{sex},#{address});
+    </insert>
+
+     <!--删除用户-->
+    <delete id="deleteUser" parameterType="java.lang.Integer">
+        Delete  from user where id = #{id};
+    </delete>
+
+    <!--更新数据-->
+    <update id="upDateUser" parameterType="com.itmin.domain.User" >
+        update mydata.user  SET username=#{username},address=#{address}   WHERE id=#{id}
+    </update>
+    <!--通过id获取用户-->
+    <select id="getUserById" resultType="com.itmin.domain.User" parameterType="int">
+        SELECT * FROM user WHERE id = #{id};
+    </select>
+    <!--模糊查询 返回值类型为泛型世纪类型-->
+    <select id="getUserByName" resultType="com.itmin.domain.User" parameterType="java.lang.String">
+        select * from user where username like #{username};
+        /*select * from user where username like %${value}%;   容易被sql注入*/
+    </select>
+
+    <!--获取用户总条数-->
+    <select id="getCount" resultType="int">
+        select count(id) from user;
+    </select>
+
+    <!--保存数据 并且拿到当前保存数据的id值-->
+    <insert id="saveUser" parameterType="com.itmin.domain.User">
+        <!-- keyProperty代表要返回的类型   order="BEFORE" 代表插入后返回id-->
+        <selectKey keyProperty="id" keyColumn="id" resultType="int" order="AFTER" >
+            select last_insert_id();
+        </selectKey>
+        insert into user(username, birthday, sex, address) VALUES (#{username},#{birthday},#{sex},#{address})
+    </insert>
+    <!--使用map集合  mapKeyId是对于map集合中的建-->
+    <select id="getUserByIdMap" resultType="aliasUser" parameterType="java.util.Map">
+        SELECT * FROM mydata.user WHERE id = #{mapKeyId} and username = #{mapKeyName};
+    </select>
+
+</mapper>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<!-- 定义的顺序 properties?,settings?,typeAliases?,typeHandlers?,objectFactory?,objectWrapperFactory?,reflectorFactory?,plugins?,environments?,databaseIdProvider?,mappers?-->
+<configuration>
+    <!--properties配置文件-->
+    <properties resource="database.properties">
+        <property name="username" value="root"/>
+        <property name="password" value="837850238"/>
+    </properties>
+    <settings>
+        <setting name="logImpl" value="LOG4J"/>
+    </settings>
+
+    <!--类型别名可为 Java 类型设置一个缩写名字。 它仅用于 XML 配置，意在降低冗余的全限定类名书写-->
+    <typeAliases>
+        <typeAlias alias="aliasUser" type="com.itmin.domain.User"/>
+        <!--指定包名，默认会找类名的小写，或者使用注解@Alias("别名")-->
+        <package name="com.itmin.domain"/>
+    </typeAliases>
+    <!-- 环境Develop配置  default选项可以切换 -->
+    <environments default="Develop">
+        <!-- 配置mysql的环境 -->
+        <environment id="Develop">
+            <!--配置事务类型-->
+            <transactionManager type="JDBC" />
+            <!--配置数据库的连接池-->
+            <dataSource type="POOLED">
+                <property name="driver" value="${driver}"/>
+                <property name="url" value="${url}"/>
+                <property name="username" value="${username}"/>
+                <property name="password" value="${password}"/>
+            </dataSource>
+            
+        </environment>
+
+        <!-- 配置test的环境 -->
+        <environment id="test">
+            <!--配置事务类型-->
+            <transactionManager type="JDBC" />
+            <!--配置数据库的连接池-->
+            <dataSource type="UNPOOLED">
+                <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://localhost:3306/mydata?useSSL=true&amp;
+                serverTimezone=Asia/Shanghai&amp;characterEncode=utf-8"/>
+                <property name="username" value="root"/>
+                <property name="password" value="837850238"/>
+            </dataSource>
+
+        </environment>
+
+    </environments>
+    <!--配置映像文件，指每一个独立的dao文件-->
+    <mappers>
+        <mapper resource="com/itmin/dao/IUserDao.xml" />
+    </mappers>
+
+
+</configuration>
